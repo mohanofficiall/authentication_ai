@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - AI Smart Attendance</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        .export-btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .export-btn.csv {
+            background: #10b981;
+            color: white;
+        }
+
+        .export-btn.excel {
+            background: #22c55e;
+            color: white;
+        }
+
+        .export-btn.pdf {
+            background: #ef4444;
+            color: white;
+        }
+
+        .export-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .action-icon {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .action-icon.edit {
+            color: var(--primary);
+        }
+
+        .action-icon.delete {
+            color: var(--danger);
+        }
+
+        .action-icon:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            animation: modalIn 0.3s ease-out;
+        }
+
+        @keyframes modalIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toast-container" class="toast-container"></div>
+
+    <nav
+        style="background: var(--glass-bg); backdrop-filter: blur(10px); padding: 1rem; border-bottom: 1px solid var(--glass-border);">
+        <div class="container flex justify-between items-center">
+            <h3 style="margin: 0;"><i class="fas fa-user-shield"></i> Admin Panel</h3>
+            <div class="flex items-center gap-4">
+                <a href="/announcements.html"
+                    style="color: var(--text-secondary); text-decoration: none; font-weight: 500;">
+                    <i class="fas fa-bullhorn"></i> Announcements
+                </a>
+                <span id="user-name" style="color: var(--text-secondary);"></span>
+                <button onclick="logout()" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 2rem 0;">
+        <div class="flex justify-between items-end mb-4">
+            <div class="fade-in-up">
+                <h1>Command Center</h1>
+                <p style="color: var(--text-secondary);">Real-time system health and administration</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="showAnnouncementModal()" class="btn btn-secondary">
+                    <i class="fas fa-bullhorn"></i> Announcement
+                </button>
+                <button onclick="showManualOverrideModal()" class="btn btn-secondary">
+                    <i class="fas fa-edit"></i> Manual Entry
+                </button>
+                <button onclick="showCreateUserModal()" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Add User
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-4 mb-4">
+            <div class="glass-card">
+                <p class="text-muted mb-1">System Users</p>
+                <div class="flex justify-between items-center">
+                    <h2 id="total-users">0</h2>
+                    <i class="fas fa-users text-primary"></i>
+                </div>
+            </div>
+            <div class="glass-card">
+                <p class="text-muted mb-1">Today's Rate</p>
+                <div class="flex justify-between items-center">
+                    <h2 id="today-attendance">0%</h2>
+                    <i class="fas fa-chart-line text-success"></i>
+                </div>
+            </div>
+            <div class="glass-card">
+                <p class="text-muted mb-1">Active Classes</p>
+                <div class="flex justify-between items-center">
+                    <h2 id="active-sessions">0</h2>
+                    <i class="fas fa-clock text-warning"></i>
+                </div>
+            </div>
+            <div class="glass-card">
+                <p class="text-muted mb-1">Security Alerts</p>
+                <div class="flex justify-between items-center">
+                    <h2 id="fraud-alerts" class="text-danger">0</h2>
+                    <i class="fas fa-shield-virus text-danger"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-3 gap-4">
+            <!-- Left Column: Analytics & Reports -->
+            <div style="grid-column: span 2;">
+                <div class="glass-card mb-4 mt-0">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3><i class="fas fa-chart-area"></i> Attendance Patterns</h3>
+                        <div class="flex gap-2">
+                            <button onclick="exportData('csv')" class="export-btn csv"><i class="fas fa-file-csv"></i>
+                                CSV</button>
+                            <button onclick="exportData('excel')" class="export-btn excel"><i
+                                    class="fas fa-file-excel"></i> Excel</button>
+                            <button onclick="exportData('pdf')" class="export-btn pdf"><i class="fas fa-file-pdf"></i>
+                                PDF</button>
+                        </div>
+                    </div>
+                    <div style="height: 300px;">
+                        <canvas id="attendance-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card mt-0">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3><i class="fas fa-users-cog"></i> User Registry</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="user-search" class="form-input"
+                                placeholder="Search by name or email..." style="width: 250px;">
+                        </div>
+                    </div>
+                    <div id="users-list" class="table-responsive">
+                        <p style="text-align: center; color: var(--text-muted);">Syncing with database...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Alerts & Distribution -->
+            <div>
+                <div class="glass-card mb-4 mt-0">
+                    <h3><i class="fas fa-user-friends"></i> Role Distribution</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                        <div class="flex justify-between items-center p-2 rounded"
+                            style="background: rgba(99, 102, 241, 0.1);">
+                            <span>Students</span>
+                            <span id="student-count" class="font-bold text-primary">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 rounded"
+                            style="background: rgba(16, 185, 129, 0.1);">
+                            <span>Staff Members</span>
+                            <span id="staff-count" class="font-bold text-success">0</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 rounded"
+                            style="background: rgba(245, 158, 11, 0.1);">
+                            <span>Administrators</span>
+                            <span id="admin-count" class="font-bold text-warning">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card mt-0">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3><i class="fas fa-bell"></i> Security Feed</h3>
+                        <button onclick="loadFraudAlerts()" class="btn btn-icon"><i
+                                class="fas fa-sync-alt"></i></button>
+                    </div>
+                    <div id="fraud-alerts-list" style="max-height: 500px; overflow-y: auto;">
+                        <p style="text-align: center; color: var(--text-muted);">Scanning for anomalies...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals (Create/Edit/Manual) -->
+    <div id="user-modal" class="modal">
+        <div class="modal-content glass-card" style="max-width: 500px;">
+            <h3 id="modal-title">Create New User</h3>
+            <form id="user-form">
+                <input type="hidden" id="edit-user-id">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="user-name-input" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="user-email-input" class="form-input" required>
+                </div>
+                <div id="password-group" class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="user-password-input" class="form-input">
+                    <p class="text-muted" style="font-size: 0.8rem;">Leave blank to keep existing password when editing.
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">System Role</label>
+                    <select id="user-role-input" class="form-select" required>
+                        <option value="student">Student</option>
+                        <option value="staff">Staff</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button type="button" onclick="hideModal('user-modal')" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="manual-override-modal" class="modal">
+        <div class="modal-content glass-card" style="max-width: 500px;">
+            <h3>Manual Attendance Entry</h3>
+            <form id="manual-override-form">
+                <div class="form-group">
+                    <label class="form-label">Student</label>
+                    <select id="override-user-id" class="form-select" required>
+                        <option value="">Select a student...</option>
+                    </select>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select id="override-status" class="form-select" required>
+                            <option value="present">Present</option>
+                            <option value="late">Late</option>
+                            <option value="absent">Absent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" id="override-date" class="form-input" required>
+                    </div>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button type="button" onclick="hideModal('manual-override-modal')"
+                        class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="announcement-modal" class="modal">
+        <div class="modal-content glass-card" style="max-width: 500px;">
+            <h3>Post New Announcement</h3>
+            <form id="announcement-form">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="ann-title" class="form-input" placeholder="e.g., Important Notice" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select id="ann-type" class="form-select">
+                        <option value="general">General</option>
+                        <option value="event">Event</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message Content</label>
+                    <textarea id="ann-content" class="form-input" placeholder="Enter details..." rows="4"
+                        required></textarea>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button type="button" onclick="hideModal('announcement-modal')"
+                        class="btn btn-secondary">Cancel</button>
+                    <button type="submit" id="post-ann-btn" class="btn btn-primary">Post Announcement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        let attendanceChart = null;
+        let allStudents = [];
+
+        if (!token) window.location.href = '/login.html';
+        document.getElementById('user-name').textContent = user.name || 'Administrator';
+        document.getElementById('override-date').valueAsDate = new Date();
+
+        // Toast Helper
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast fade-in`;
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            const color = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            toast.innerHTML = `<i class="fas fa-${icon}" style="color: ${color}"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        }
+
+        async function loadAnalytics() {
+            try {
+                const response = await fetch(`${API_URL}/admin/analytics`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('total-users').textContent = data.users.total;
+                    document.getElementById('today-attendance').textContent = data.today.percentage + '%';
+                    document.getElementById('active-sessions').textContent = data.active_sessions;
+                    document.getElementById('fraud-alerts').textContent = data.fraud_alerts.unresolved;
+                    document.getElementById('student-count').textContent = data.users.students;
+                    document.getElementById('staff-count').textContent = data.users.staff;
+                    document.getElementById('admin-count').textContent = data.users.admins;
+                    updateAttendanceChart(data.attendance_trend);
+                }
+            } catch (error) { console.error('Analytics Error:', error); }
+        }
+
+        function updateAttendanceChart(trendData) {
+            const ctx = document.getElementById('attendance-chart').getContext('2d');
+            if (attendanceChart) attendanceChart.destroy();
+            attendanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: trendData.map(d => new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
+                    datasets: [{
+                        label: 'Attendance Count',
+                        data: trendData.map(d => d.count),
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        async function loadUsers() {
+            try {
+                const search = document.getElementById('user-search').value;
+                const url = search ? `${API_URL}/admin/users?search=${search}` : `${API_URL}/admin/users`;
+                const response = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (response.ok) {
+                    const data = await response.json();
+                    const list = document.getElementById('users-list');
+                    allStudents = data.users.filter(u => u.role === 'student');
+                    updateOverrideStudentList();
+
+                    if (data.users.length > 0) {
+                        list.innerHTML = `
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th style="text-align: right;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.users.map(u => `
+                                        <tr>
+                                            <td><div class="flex items-center gap-2"><div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">${u.name.charAt(0)}</div><strong>${u.name}</strong></div></td>
+                                            <td>${u.email}</td>
+                                            <td><span class="badge ${u.role === 'admin' ? 'badge-warning' : u.role === 'staff' ? 'badge-secondary' : 'badge-primary'}">${u.role}</span></td>
+                                            <td><span style="color: ${u.is_active ? 'var(--success)' : 'var(--danger)'}">${u.is_active ? 'Active' : 'Inactive'}</span></td>
+                                            <td style="text-align: right;">
+                                                <i class="fas fa-edit action-icon edit" onclick="showEditUserModal('${u.user_id}', '${u.name}', '${u.email}', '${u.role}')" title="Edit User"></i>
+                                                <i class="fas fa-trash action-icon delete" onclick="deleteUser('${u.user_id}')" title="Delete User"></i>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>`;
+                    } else list.innerHTML = '<p class="text-center text-muted">No users found.</p>';
+                }
+            } catch (error) { console.error('Load Users Error:', error); }
+        }
+
+        function updateOverrideStudentList() {
+            const select = document.getElementById('override-user-id');
+            const currentVal = select.value;
+            select.innerHTML = '<option value="">Select a student...</option>' +
+                allStudents.map(s => `<option value="${s.user_id}">${s.name} (${s.email})</option>`).join('');
+            select.value = currentVal;
+        }
+
+        async function loadFraudAlerts() {
+            try {
+                const response = await fetch(`${API_URL}/admin/fraud-alerts`, { headers: { 'Authorization': `Bearer ${token}` } });
+                if (response.ok) {
+                    const data = await response.json();
+                    const list = document.getElementById('fraud-alerts-list');
+                    if (data.alerts.length > 0) {
+                        list.innerHTML = data.alerts.map(alert => `
+                            <div class="glass-card mb-2 p-3" style="border-left: 4px solid ${getSeverityColor(alert.severity)};">
+                                <div class="flex justify-between items-start mb-2">
+                                    <span class="badge" style="background: ${getSeverityColor(alert.severity)}; color: white;">${alert.severity.toUpperCase()}</span>
+                                    <span class="text-muted" style="font-size: 0.75rem;">${new Date(alert.created_at).toLocaleTimeString()}</span>
+                                </div>
+                                <p class="mb-1"><strong>${alert.user_name}</strong>: ${alert.alert_type.replace('_', ' ')}</p>
+                                <p class="text-muted mb-2" style="font-size: 0.85rem;">${alert.description}</p>
+                                ${!alert.is_resolved ? `<button onclick="resolveAlert('${alert.alert_id}')" class="btn btn-sm btn-success w-full">Mark Resolved</button>` : '<span class="text-success"><i class="fas fa-check"></i> Resolved</span>'}
+                            </div>`).join('');
+                    } else list.innerHTML = '<p class="text-center text-muted">System secure. No alerts.</p>';
+                }
+            } catch (error) { console.error('Alerts Error:', error); }
+        }
+
+        function getSeverityColor(sev) {
+            return { 'low': '#10b981', 'medium': '#f59e0b', 'high': '#ef4444', 'critical': '#991b1b' }[sev] || '#6366f1';
+        }
+
+        async function exportData(format) {
+            try {
+                const response = await fetch(`${API_URL}/admin/attendance/export?format=${format}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `attendance_report_${new Date().toISOString().split('T')[0]}.${format === 'excel' ? 'xlsx' : format}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    showToast(`${format.toUpperCase()} export started...`);
+                } else {
+                    const errorData = await response.json();
+                    showToast(errorData.error || 'Export failed', 'error');
+                }
+            } catch (error) { showToast('Export error', 'error'); }
+        }
+
+        // Modal Controls
+        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function hideModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function showCreateUserModal() {
+            document.getElementById('modal-title').textContent = 'Create New User';
+            document.getElementById('edit-user-id').value = '';
+            document.getElementById('user-form').reset();
+            document.getElementById('password-group').querySelector('input').required = true;
+            showModal('user-modal');
+        }
+
+        function showEditUserModal(id, name, email, role) {
+            document.getElementById('modal-title').textContent = 'Modify User Account';
+            document.getElementById('edit-user-id').value = id;
+            document.getElementById('user-name-input').value = name;
+            document.getElementById('user-email-input').value = email;
+            document.getElementById('user-role-input').value = role;
+            document.getElementById('password-group').querySelector('input').required = false;
+            showModal('user-modal');
+        }
+
+        function showManualOverrideModal() { showModal('manual-override-modal'); }
+
+        document.getElementById('user-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('edit-user-id').value;
+            const userData = {
+                name: document.getElementById('user-name-input').value,
+                email: document.getElementById('user-email-input').value,
+                role: document.getElementById('user-role-input').value
+            };
+            const pass = document.getElementById('user-password-input').value;
+            if (pass) userData.password = pass;
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/admin/users/${id}` : `${API_URL}/admin/users`;
+
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(userData)
+                });
+                if (response.ok) {
+                    showToast(id ? 'User updated' : 'User created');
+                    hideModal('user-modal');
+                    loadUsers();
+                    loadAnalytics();
+                } else {
+                    const data = await response.json();
+                    showToast(data.error || 'Server error', 'error');
+                }
+            } catch (e) { showToast('Network Error', 'error'); }
+        });
+
+        document.getElementById('manual-override-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                user_id: document.getElementById('override-user-id').value,
+                status: document.getElementById('override-status').value,
+                date: document.getElementById('override-date').value
+            };
+            try {
+                const response = await fetch(`${API_URL}/admin/attendance/manual-override`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(data)
+                });
+                if (response.ok) {
+                    showToast('Attendance updated manually');
+                    hideModal('manual-override-modal');
+                    loadAnalytics();
+                } else showToast('Failed to update attendance', 'error');
+            } catch (e) { showToast('Network Error', 'error'); }
+        });
+
+        async function deleteUser(id) {
+            if (!confirm('Are you certain you want to delete this user? This action cannot be undone.')) return;
+            try {
+                const response = await fetch(`${API_URL}/admin/users/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    showToast('User deleted successfully');
+                    loadUsers();
+                    loadAnalytics();
+                } else showToast('Deletion failed', 'error');
+            } catch (e) { showToast('Network Error', 'error'); }
+        }
+
+        async function resolveAlert(id) {
+            try {
+                const response = await fetch(`${API_URL}/admin/fraud-alerts/${id}/resolve`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) { showToast('Alert resolved'); loadFraudAlerts(); loadAnalytics(); }
+            } catch (e) { showToast('Error resolving alert', 'error'); }
+        }
+
+        // Announcement Logic
+        function showAnnouncementModal() { showModal('announcement-modal'); }
+
+        document.getElementById('announcement-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('post-ann-btn');
+            btn.disabled = true;
+            btn.textContent = 'Posting...';
+
+            const data = {
+                title: document.getElementById('ann-title').value,
+                type: document.getElementById('ann-type').value,
+                content: document.getElementById('ann-content').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/announcements`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    showToast('Announcement posted!');
+                    hideModal('announcement-modal');
+                    document.getElementById('announcement-form').reset();
+                } else {
+                    const err = await response.json();
+                    showToast(err.error || 'Failed to post', 'error');
+                }
+            } catch (error) {
+                showToast('Connection error', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Post Announcement';
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
+
+        document.getElementById('user-search').addEventListener('input', loadUsers);
+
+        // Initialization
+        loadAnalytics();
+        loadFraudAlerts();
+        loadUsers();
+        setInterval(() => { loadAnalytics(); loadFraudAlerts(); }, 30000);
+    </script>
+    <script src="/js/chatbot.js"></script>
+</body>
+
+</html>

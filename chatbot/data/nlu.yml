@@ -1,0 +1,92 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - good morning
+    - good evening
+    - hey there
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you around
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - very good
+    - great
+    - amazing
+    - wonderful
+    - I am feeling very good
+    - I am great
+
+- intent: mood_unhappy
+  examples: |
+    - sad
+    - very sad
+    - unhappy
+    - bad
+    - very bad
+    - awful
+    - terrible
+    - not very good
+    - extremely sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - are you a chatbot?
+
+- intent: ask_attendance_status
+  examples: |
+    - what is my attendance today?
+    - am I marked present?
+    - did I get attendance?
+    - check my status
+
+- intent: ask_attendance_percentage
+  examples: |
+    - what is my attendance percentage?
+    - is my attendance low?
+    - how much attendance do I have?
+    - show me my analytics
+
+- intent: mark_attendance_help
+  examples: |
+    - how to mark attendance?
+    - I can't mark attendance
+    - attendance button not working
+    - help me with attendance
+
+- intent: report_issue
+  examples: |
+    - I have an issue
+    - request correction
+    - my attendance is wrong
+    - report a bug

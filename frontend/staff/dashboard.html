@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - AI Smart Attendance</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <nav
+        style="background: var(--glass-bg); backdrop-filter: blur(10px); padding: 1rem; border-bottom: 1px solid var(--glass-border);">
+        <div class="container flex justify-between items-center">
+            <h3 style="margin: 0;"><i class="fas fa-chalkboard-teacher"></i> Staff Dashboard</h3>
+            <div class="flex items-center gap-3">
+                <a href="/announcements.html"
+                    style="color: var(--text-secondary); text-decoration: none; font-weight: 500;">
+                    <i class="fas fa-bullhorn"></i> Announcements
+                </a>
+                <span id="user-name" style="color: var(--text-secondary);"></span>
+                <button onclick="logout()" class="btn btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 2rem 0;">
+        <div class="fade-in-up flex justify-between items-end">
+            <div>
+                <h1>Staff Dashboard</h1>
+                <p style="color: var(--text-secondary);">Manage attendance sessions and monitor student attendance</p>
+            </div>
+            <button onclick="showAnnouncementModal()" class="btn btn-secondary">
+                <i class="fas fa-bullhorn"></i> Post Announcement
+            </button>
+        </div>
+
+        <!-- Session Control -->
+        <div class="glass-card mt-4 fade-in">
+            <h3><i class="fas fa-play-circle"></i> Attendance Session</h3>
+
+            <div id="no-session" style="display: none;">
+                <p style="color: var(--text-secondary);">No active session. Start a new session to begin marking
+                    attendance.</p>
+                <button onclick="showStartSessionModal()" class="btn btn-primary mt-2">
+                    <i class="fas fa-plus-circle"></i> Start New Session
+                </button>
+            </div>
+
+            <div id="active-session" style="display: none;">
+                <div class="grid grid-2">
+                    <div>
+                        <p style="margin: 0; color: var(--text-muted);">Class</p>
+                        <h4 id="session-class" style="margin: 0.5rem 0;">-</h4>
+                    </div>
+                    <div>
+                        <p style="margin: 0; color: var(--text-muted);">Subject</p>
+                        <h4 id="session-subject" style="margin: 0.5rem 0;">-</h4>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center mt-3">
+                    <div>
+                        <p style="margin: 0; color: var(--text-muted);">Attendance Count</p>
+                        <h3 id="attendance-count" style="margin: 0.5rem 0; color: var(--success);">0</h3>
+                    </div>
+                    <button onclick="stopSession()" class="btn btn-danger">
+                        <i class="fas fa-stop-circle"></i> Stop Session
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Summary -->
+        <div class="grid grid-3 mt-4">
+            <div class="glass-card fade-in">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p style="color: var(--text-muted); margin: 0;">Total Today</p>
+                        <h2 id="total-today" style="margin: 0.5rem 0;">0</h2>
+                    </div>
+                    <i class="fas fa-users" style="font-size: 2.5rem; color: var(--primary);"></i>
+                </div>
+            </div>
+
+            <div class="glass-card fade-in">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p style="color: var(--text-muted); margin: 0;">Present</p>
+                        <h2 id="present-today" style="margin: 0.5rem 0; color: var(--success);">0</h2>
+                    </div>
+                    <i class="fas fa-check-circle" style="font-size: 2.5rem; color: var(--success);"></i>
+                </div>
+            </div>
+
+            <div class="glass-card fade-in">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p style="color: var(--text-muted); margin: 0;">Late</p>
+                        <h2 id="late-today" style="margin: 0.5rem 0; color: var(--warning);">0</h2>
+                    </div>
+                    <i class="fas fa-clock" style="font-size: 2.5rem; color: var(--warning);"></i>
+                </div>
+            </div>
+
+            <!-- Staff AI Assistant Card -->
+            <div class="glass-card fade-in"
+                onclick="if(event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && !event.target.closest('button')) ChatbotWidget.toggleChat()"
+                style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%); border: 1px solid var(--primary); grid-column: span 3; cursor: pointer; transition: transform 0.3s ease;">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 style="margin: 0; color: var(--primary);"><i class="fas fa-robot"></i> Staff AI Assistant</h4>
+                    <span class="badge" style="background: var(--primary); font-size: 0.7rem;">LIVE</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Ask me anything about
+                    session management or subject support!</p>
+                <div class="flex gap-2">
+                    <input type="text" id="dashboard-ai-input" placeholder="Type your doubt..."
+                        style="flex: 1; padding: 0.75rem 1.5rem; border-radius: var(--radius-full); background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; font-size: 1rem;"
+                        onkeypress="if(event.key === 'Enter') { ChatbotWidget.openWithText(this.value); this.value = ''; }">
+                    <button
+                        onclick="const input = document.getElementById('dashboard-ai-input'); ChatbotWidget.openWithText(input.value); input.value = '';"
+                        class="btn btn-primary"
+                        style="padding: 0.75rem 1.5rem; border-radius: var(--radius-full); display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-paper-plane"></i> Send
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Document Management (Staff) -->
+        <div class="glass-card mt-4 fade-in-up">
+            <h3><i class="fas fa-file-upload"></i> Upload Course Documents</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Share PDFs, assignments, or
+                study materials with students.</p>
+
+            <form id="upload-form" class="flex flex-col gap-3">
+                <div class="form-group">
+                    <label class="form-label">Document Title</label>
+                    <input type="text" id="doc-title" class="form-input" placeholder="e.g., Lecture 1 Notes" required>
+                </div>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <input type="text" id="doc-subject" class="form-input" placeholder="e.g., Mathematics">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Select File (PDF, Doc, Image)</label>
+                        <input type="file" id="doc-file" class="form-input" required style="padding: 0.5rem;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description (Optional)</label>
+                    <textarea id="doc-description" class="form-input" placeholder="Briefly describe the document..."
+                        rows="2"></textarea>
+                </div>
+                <button type="submit" id="upload-btn" class="btn btn-primary" style="align-self: flex-start;">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload Document
+                </button>
+            </form>
+
+            <div class="mt-4">
+                <h4>Your Uploaded Documents</h4>
+                <div id="staff-docs-list" class="mt-2">
+                    <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">Loading documents...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Announcement Modal -->
+    <div id="announcement-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="glass-card" style="max-width: 500px; width: 90%;">
+            <h3>Post New Announcement</h3>
+            <form id="announcement-form">
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="ann-title" class="form-input" placeholder="e.g., Tomorrow's College Event"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <select id="ann-type" class="form-select">
+                        <option value="general">General</option>
+                        <option value="event">Event</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Message Content</label>
+                    <textarea id="ann-content" class="form-input" placeholder="Enter your announcement details here..."
+                        rows="4" required></textarea>
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" id="post-ann-btn" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Post Announcement
+                    </button>
+                    <button type="button" onclick="hideAnnouncementModal()" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Start Session Modal -->
+    <div id="session-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="glass-card" style="max-width: 500px; width: 90%;">
+            <h3>Start Attendance Session</h3>
+            <form id="session-form">
+                <div class="form-group">
+                    <label class="form-label">Class Name</label>
+                    <input type="text" id="class-name" class="form-input" placeholder="e.g., Computer Science A"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" id="subject" class="form-input" placeholder="e.g., AI & Machine Learning"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Duration (minutes)</label>
+                    <input type="number" id="duration" class="form-input" value="60" min="15" max="180">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Late Threshold (minutes)</label>
+                    <input type="number" id="late-threshold" class="form-input" value="15" min="5" max="60">
+                </div>
+                <div class="flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Start Session
+                    </button>
+                    <button type="button" onclick="hideStartSessionModal()" class="btn btn-secondary">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        let currentSessionId = null;
+
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
+        document.getElementById('user-name').textContent = user.name || 'Staff';
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/staff/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Update session status
+                    if (data.active_session) {
+                        currentSessionId = data.active_session.session_id;
+                        document.getElementById('no-session').style.display = 'none';
+                        document.getElementById('active-session').style.display = 'block';
+                        document.getElementById('session-class').textContent = data.active_session.class_name;
+                        document.getElementById('session-subject').textContent = data.active_session.subject || 'N/A';
+                        document.getElementById('attendance-count').textContent = data.active_session.attendance_count || 0;
+                    } else {
+                        document.getElementById('no-session').style.display = 'block';
+                        document.getElementById('active-session').style.display = 'none';
+                    }
+
+                    // Update today's summary
+                    document.getElementById('total-today').textContent = data.today_summary.total;
+                    document.getElementById('present-today').textContent = data.today_summary.present;
+                    document.getElementById('late-today').textContent = data.today_summary.late;
+
+                    // Update pending corrections
+                    document.getElementById('pending-count').textContent = data.pending_corrections;
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+
+            loadCorrections();
+        }
+
+        async function loadCorrections() {
+            try {
+                const response = await fetch(`${API_URL}/staff/corrections/pending`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const list = document.getElementById('corrections-list');
+
+                    if (data.corrections.length > 0) {
+                        list.innerHTML = data.corrections.map(c => `
+                            <div style="padding: 1rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); margin-bottom: 1rem;">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <strong>${c.user_name}</strong>
+                                        <p style="margin: 0.25rem 0; color: var(--text-muted); font-size: 0.9rem;">
+                                            Date: ${new Date(c.request_date).toLocaleDateString()}
+                                        </p>
+                                        <p style="margin: 0.5rem 0;">${c.reason}</p>
+                                    </div>
+                                    <div class="flex gap-1">
+                                        <button onclick="approveCorrection('${c.request_id}')" class="btn btn-success" style="padding: 0.5rem 1rem;">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button onclick="rejectCorrection('${c.request_id}')" class="btn btn-danger" style="padding: 0.5rem 1rem;">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        list.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No pending corrections</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading corrections:', error);
+            }
+        }
+
+        function showStartSessionModal() {
+            document.getElementById('session-modal').style.display = 'flex';
+        }
+
+        function hideStartSessionModal() {
+            document.getElementById('session-modal').style.display = 'none';
+        }
+
+        document.getElementById('session-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const className = document.getElementById('class-name').value;
+            const subject = document.getElementById('subject').value;
+            const duration = parseInt(document.getElementById('duration').value);
+            const lateThreshold = parseInt(document.getElementById('late-threshold').value);
+
+            try {
+                const response = await fetch(`${API_URL}/staff/session/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        class_name: className,
+                        subject: subject,
+                        duration_minutes: duration,
+                        late_threshold_minutes: lateThreshold
+                    })
+                });
+
+                if (response.ok) {
+                    hideStartSessionModal();
+                    loadDashboard();
+                } else {
+                    const data = await response.json();
+                    alert(data.error);
+                }
+            } catch (error) {
+                alert('Error starting session');
+            }
+        });
+
+        async function stopSession() {
+            if (!confirm('Are you sure you want to stop this session?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/staff/session/stop/${currentSessionId}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(`Session stopped. Summary:\nTotal: ${data.summary.total}\nPresent: ${data.summary.present}\nLate: ${data.summary.late}`);
+                    loadDashboard();
+                }
+            } catch (error) {
+                alert('Error stopping session');
+            }
+        }
+
+        async function approveCorrection(requestId) {
+            try {
+                const response = await fetch(`${API_URL}/staff/corrections/${requestId}/approve`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ comment: 'Approved' })
+                });
+
+                if (response.ok) {
+                    loadDashboard();
+                    loadCorrections();
+                }
+            } catch (error) {
+                alert('Error approving correction');
+            }
+        }
+
+        async function rejectCorrection(requestId) {
+            const comment = prompt('Reason for rejection:');
+            if (!comment) return;
+
+            try {
+                const response = await fetch(`${API_URL}/staff/corrections/${requestId}/reject`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ comment })
+                });
+
+                if (response.ok) {
+                    loadDashboard();
+                    loadCorrections();
+                }
+            } catch (error) {
+                alert('Error rejecting correction');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
+
+        loadDashboard();
+        loadDocuments();
+        setInterval(loadDashboard, 10000); // Refresh every 10 seconds
+
+        // Document Management Logic
+        async function loadDocuments() {
+            try {
+                const response = await fetch(`${API_URL}/documents`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const list = document.getElementById('staff-docs-list');
+
+                    if (data.documents.length > 0) {
+                        list.innerHTML = data.documents.map(doc => `
+                            <div style="padding: 1rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02);">
+                                <div>
+                                    <h5 style="margin: 0; color: var(--text-primary);">${doc.title}</h5>
+                                    <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">${doc.subject} • ${new Date(doc.created_at).toLocaleDateString()}</p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <a href="${API_URL}/documents/download/${doc.document_id}" target="_blank" class="btn btn-secondary" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; background: var(--bg-tertiary);">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <button onclick="deleteDocument('${doc.document_id}')" class="btn btn-danger" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        list.innerHTML = '<p style="text-align: center; color: var(--text-muted); font-size: 0.9rem;">No documents uploaded yet</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading documents:', error);
+            }
+        }
+
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn = document.getElementById('upload-btn');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+
+            const formData = new FormData();
+            formData.append('file', document.getElementById('doc-file').files[0]);
+            formData.append('title', document.getElementById('doc-title').value);
+            formData.append('subject', document.getElementById('doc-subject').value);
+            formData.append('description', document.getElementById('doc-description').value);
+
+            try {
+                const response = await fetch(`${API_URL}/documents/upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Document uploaded successfully!');
+                    document.getElementById('upload-form').reset();
+                    loadDocuments();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Upload failed');
+                }
+            } catch (error) {
+                alert('Connection error during upload');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+
+        async function deleteDocument(docId) {
+            if (!confirm('Are you sure you want to delete this document?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/documents/${docId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    loadDocuments();
+                } else {
+                    const data = await response.json();
+                    alert(data.error || 'Delete failed');
+                }
+            } catch (error) {
+                alert('Error deleting document');
+            }
+        }
+
+        // Announcement Logic
+        function showAnnouncementModal() {
+            document.getElementById('announcement-modal').style.display = 'flex';
+        }
+
+        function hideAnnouncementModal() {
+            document.getElementById('announcement-modal').style.display = 'none';
+        }
+
+        document.getElementById('announcement-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('post-ann-btn');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
+
+            const data = {
+                title: document.getElementById('ann-title').value,
+                type: document.getElementById('ann-type').value,
+                content: document.getElementById('ann-content').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/announcements`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Announcement posted successfully!');
+                    hideAnnouncementModal();
+                    document.getElementById('announcement-form').reset();
+                } else {
+                    const err = await response.json();
+                    alert(err.error || 'Failed to post announcement');
+                }
+            } catch (error) {
+                alert('Connection error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        });
+    </script>
+    <script src="/js/chatbot.js?v=restore_half_screen"></script>
+</body>
+
+</html>

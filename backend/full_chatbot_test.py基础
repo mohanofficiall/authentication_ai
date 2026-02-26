@@ -1,0 +1,64 @@
+import jwt
+import requests
+import sqlite3
+from datetime import datetime, timedelta
+import os
+
+def test_chatbot_fully():
+    # 1. Get a user from the DB
+    try:
+        conn = sqlite3.connect('backend/attendance.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT user_id, role, email, name FROM users WHERE email = 'student@test.com' LIMIT 1")
+        user = cursor.fetchone()
+        conn.close()
+        
+        if not user:
+            print("❌ Student user not found in database.")
+            return
+            
+        user_id, role, email, name = user
+        print(f"Testing as user: {name} ({role})")
+    except Exception as e:
+        print(f"❌ DB Error: {e}")
+        return
+
+    # 2. Generate token
+    jwt_secret = 'jwt-secret-key-change-in-production'
+    payload = {
+        'user_id': user_id,
+        'role': role,
+        'email': email,
+        'name': name,
+        'exp': datetime.utcnow() + timedelta(hours=24),
+        'iat': datetime.utcnow()
+    }
+    token = jwt.encode(payload, jwt_secret, algorithm='HS256')
+    
+    # 3. Call API (The Flask app is running on port 5000 in the background)
+    url = "http://localhost:5000/api/chatbot/message"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    data = {"message": "Hello Attendo! Can you explain matrix multiplication?"}
+    
+    print(f"Sending request to {url}...")
+    try:
+        response = requests.post(url, headers=headers, json=data, timeout=30)
+        
+        if response.status_code == 200:
+            result = response.json()
+            bot_text = result['response'][0]['text']
+            print("\n✅ Chatbot Response Received!")
+            print("-" * 50)
+            print(f"Bot: {bot_text}")
+            print("-" * 50)
+        else:
+            print(f"\n❌ API Error (Status {response.status_code}): {response.text}")
+            
+    except Exception as e:
+        print(f"\n❌ Request Error: {e}")
+
+if __name__ == "__main__":
+    test_chatbot_fully()

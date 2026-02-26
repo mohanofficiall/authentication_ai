@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mark Attendance - AI Smart Attendance</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <nav
+        style="background: var(--glass-bg); backdrop-filter: blur(10px); padding: 1rem; border-bottom: 1px solid var(--glass-border);">
+        <div class="container flex justify-between items-center">
+            <h3 style="margin: 0;"><i class="fas fa-fingerprint"></i> Mark Attendance</h3>
+            <a href="/student/dashboard.html" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 2rem 0; max-width: 800px;">
+        <div class="glass-card fade-in-up">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-camera-retro" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <h2>Mark Your Attendance</h2>
+                <p style="color: var(--text-secondary);">Position your face in the frame and follow the prompts</p>
+            </div>
+
+            <div id="alert-container"></div>
+
+            <div style="text-align: center;">
+                <video id="video" width="100%" height="400" autoplay
+                    style="border-radius: var(--radius-lg); background: var(--bg-secondary); display: none; max-width: 640px;"></video>
+                <canvas id="canvas" style="display: none;"></canvas>
+
+                <div id="instructions"
+                    style="padding: 2rem; background: var(--bg-secondary); border-radius: var(--radius-lg); margin: 1rem 0;">
+                    <p style="font-size: 1.1rem; margin: 0;">
+                        <i class="fas fa-info-circle"></i> Click "Start Camera" to begin
+                    </p>
+                </div>
+
+                <div id="liveness-prompt"
+                    style="display: none; padding: 1.5rem; background: var(--primary); border-radius: var(--radius-lg); margin: 1rem 0;">
+                    <p style="font-size: 1.2rem; font-weight: 600; margin: 0; color: white;">
+                        <i class="fas fa-eye"></i> <span id="prompt-text">Please blink your eyes</span>
+                    </p>
+                </div>
+
+                <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button id="start-camera-btn" class="btn btn-primary">
+                        <i class="fas fa-camera"></i> Start Camera
+                    </button>
+                    <button id="capture-btn" class="btn btn-success" style="display: none;">
+                        <i class="fas fa-fingerprint"></i> Capture & Mark Attendance
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--glass-border);">
+                <h4><i class="fas fa-shield-alt"></i> Liveness Detection</h4>
+                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                    For security, we verify you're a real person by detecting eye blinks and head movements.
+                    This prevents photo spoofing and ensures accurate attendance.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const token = localStorage.getItem('token');
+        let stream = null;
+        let capturedFrames = [];
+
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
+        // Start camera
+        document.getElementById('start-camera-btn').addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { width: 640, height: 480 }
+                });
+
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                video.style.display = 'block';
+
+                document.getElementById('start-camera-btn').style.display = 'none';
+                document.getElementById('instructions').style.display = 'none';
+                document.getElementById('liveness-prompt').style.display = 'block';
+
+                // Wait 2 seconds then show capture button
+                setTimeout(() => {
+                    document.getElementById('capture-btn').style.display = 'inline-flex';
+                    document.getElementById('prompt-text').textContent = 'Ready! Click to mark attendance';
+                }, 2000);
+
+            } catch (error) {
+                showAlert('error', 'Error accessing camera: ' + error.message);
+            }
+        });
+
+        // Capture and mark attendance
+        document.getElementById('capture-btn').addEventListener('click', async () => {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const captureBtn = document.getElementById('capture-btn');
+
+            captureBtn.disabled = true;
+            captureBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+            // Capture frame
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            const imageData = canvas.toDataURL('image/jpeg');
+
+            // Get geolocation (optional)
+            let geoLocation = null;
+            if (navigator.geolocation) {
+                try {
+                    const position = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject);
+                    });
+                    geoLocation = `${position.coords.latitude},${position.coords.longitude}`;
+                } catch (error) {
+                    console.log('Geolocation not available');
+                }
+            }
+
+            // Mark attendance
+            try {
+                const response = await fetch(`${API_URL}/student/mark-attendance`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        face_image: imageData,
+                        geo_location: geoLocation
+                    })
+                });
+
+                const data = await response.json();
+
+                // Stop camera
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+
+                if (response.ok) {
+                    showAlert('success', data.message);
+                    document.getElementById('video').style.display = 'none';
+                    document.getElementById('liveness-prompt').style.display = 'none';
+                    captureBtn.style.display = 'none';
+
+                    // Show success message and redirect
+                    setTimeout(() => {
+                        window.location.href = '/student/dashboard.html';
+                    }, 3000);
+                } else {
+                    showAlert('error', data.error);
+                    captureBtn.disabled = false;
+                    captureBtn.innerHTML = '<i class="fas fa-fingerprint"></i> Capture & Mark Attendance';
+                }
+            } catch (error) {
+                showAlert('error', 'Network error. Please check if the server is running.');
+                captureBtn.disabled = false;
+                captureBtn.innerHTML = '<i class="fas fa-fingerprint"></i> Capture & Mark Attendance';
+            }
+        });
+
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+
+            alertContainer.innerHTML = `
+                <div class="alert ${alertClass} fade-in">
+                    <i class="fas fa-${icon}"></i> ${message}
+                </div>
+            `;
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+    </script>
+</body>
+
+</html>

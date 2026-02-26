@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Smart Attendance System</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="glass-card"
+        style="position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); width: 95%; max-width: 1200px; z-index: 1000; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-radius: var(--radius-full);">
+        <div class="logo" style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-fingerprint" style="font-size: 1.5rem; color: var(--primary);"></i>
+            <span style="font-weight: 700; font-size: 1.2rem;">Attendo.AI</span>
+        </div>
+        <div class="nav-actions" style="display: flex; gap: 1rem;">
+            <button onclick="showAttendanceKiosk()" class="btn btn-secondary"
+                style="padding: 0.5rem 1.5rem; border-radius: var(--radius-full); background: var(--secondary); color: white; border: none; cursor: pointer;">
+                <i class="fas fa-camera"></i> Attendance
+            </button>
+            <a href="/login.html" class="btn btn-primary"
+                style="padding: 0.5rem 1.5rem; border-radius: var(--radius-full);">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="/register.html" class="btn btn-outline"
+                style="padding: 0.5rem 1.5rem; border-radius: var(--radius-full);">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="container"
+        style="min-height: 100vh; padding-top: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
+        <div class="fade-in-up" style="max-width: 800px;">
+            <span
+                style="background: rgba(99, 102, 241, 0.1); color: var(--primary); padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; display: inline-block;">
+                🚀 Next Gen Attendance System
+            </span>
+            <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem;">
+                The Future of <br>
+                <span
+                    style="background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Smart Attendance
+                </span>
+            </h1>
+            <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 2.5rem; line-height: 1.8;">
+                Experience enterprise-grade security with Face Recognition and Biometrics.
+                Automate your workflow with real-time analytics and AI-powered insights.
+            </p>
+        </div>
+
+
+    </section>
+
+    <!-- Features Grid -->
+    <section class="container" style="margin-bottom: 5rem;">
+        <h2 class="text-center" style="margin-bottom: 3rem;">Core Features</h2>
+        <div class="grid grid-3">
+            <div class="glass-card hover-lift">
+                <div
+                    style="background: rgba(16, 185, 129, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-face-smile" style="font-size: 2rem; color: var(--success);"></i>
+                </div>
+                <h3>Face Recognition</h3>
+                <p>99.9% accuracy with advanced liveness detection preventing spoofing attacks.</p>
+            </div>
+            <div class="glass-card hover-lift">
+                <div
+                    style="background: rgba(245, 158, 11, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-shield-halved" style="font-size: 2rem; color: var(--warning);"></i>
+                </div>
+                <h3>Fraud Detection</h3>
+                <p>Real-time alerts for duplicate entries, proxy attendance, and face mismatches.</p>
+            </div>
+            <div class="glass-card hover-lift">
+                <div
+                    style="background: rgba(99, 102, 241, 0.1); width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-chart-line" style="font-size: 2rem; color: var(--primary);"></i>
+                </div>
+                <h3>Smart Analytics</h3>
+                <p>Comprehensive dashboard with daily trends, exportable reports (PDF/Excel), and more.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Carousel Section -->
+    <section class="container" style="margin-bottom: 5rem;">
+        <h2 class="text-center" style="margin-bottom: 2rem;">System Preview</h2>
+        <div class="glass-card" style="padding: 1rem; overflow: hidden; position: relative;">
+            <div class="carousel-container"
+                style="display: flex; gap: 2rem; overflow-x: auto; padding: 2rem 1rem; scroll-behavior: smooth; scrollbar-width: none;">
+                <!-- Slide 1 -->
+                <div class="carousel-item"
+                    style="min-width: 100%; height: 400px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <div style="text-align: center; z-index: 2;">
+                        <i class="fas fa-desktop"
+                            style="font-size: 5rem; color: var(--primary); margin-bottom: 1rem; opacity: 0.8;"></i>
+                        <h3>Admin Dashboard</h3>
+                        <p>Complete control over users and reports</p>
+                    </div>
+                    <!-- Decorative background elements -->
+                    <div
+                        style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: var(--primary); opacity: 0.1; border-radius: 50%; filter: blur(50px);">
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item"
+                    style="min-width: 100%; height: 400px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <div style="text-align: center; z-index: 2;">
+                        <i class="fas fa-mobile-alt"
+                            style="font-size: 5rem; color: var(--success); margin-bottom: 1rem; opacity: 0.8;"></i>
+                        <h3>Mobile Friendly</h3>
+                        <p>Mark attendance from any device</p>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="carousel-item"
+                    style="min-width: 100%; height: 400px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <div style="text-align: center; z-index: 2;">
+                        <i class="fas fa-robot"
+                            style="font-size: 5rem; color: var(--secondary); margin-bottom: 1rem; opacity: 0.8;"></i>
+                        <h3>AI Chatbot</h3>
+                        <p>Instant answers for students and staff</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <!-- Auto-scroll script added below -->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const container = document.querySelector('.carousel-container');
+                    setInterval(() => {
+                        if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 10) {
+                            container.scrollTo({ left: 0, behavior: 'smooth' });
+                        } else {
+                            container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
+                        }
+                    }, 3000);
+                });
+            </script>
+        </div>
+    </section>
+
+    <!-- Extra Features Section -->
+    <section class="container" style="margin-bottom: 5rem;">
+        <h2 class="text-center" style="margin-bottom: 3rem;">Powerful Add-ons</h2>
+        <div class="grid grid-4" style="gap: 1.5rem;">
+            <div class="glass-card text-center hover-lift" style="padding: 1.5rem;">
+                <i class="fas fa-wifi" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <h4>Offline Sync</h4>
+            </div>
+            <div class="glass-card text-center hover-lift" style="padding: 1.5rem;">
+                <i class="fas fa-file-export"
+                    style="font-size: 2rem; color: var(--secondary); margin-bottom: 1rem;"></i>
+                <h4>Export PDF/Excel</h4>
+            </div>
+            <div class="glass-card text-center hover-lift" style="padding: 1.5rem;">
+                <i class="fas fa-comments" style="font-size: 2rem; color: var(--success); margin-bottom: 1rem;"></i>
+                <h4>Chatbot Assistance</h4>
+            </div>
+            <div class="glass-card text-center hover-lift" style="padding: 1.5rem;">
+                <i class="fas fa-lock" style="font-size: 2rem; color: var(--warning); margin-bottom: 1rem;"></i>
+                <h4>Encrypted Data</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- Register Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('ServiceWorker registered'))
+                    .catch(err => console.log('ServiceWorker registration failed: ', err));
+            });
+        }
+    </script>
+
+    <!-- Kiosk Modal -->
+    <div id="kiosk-modal" class="modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px);">
+        <div class="glass-card" style="width: 90%; max-width: 600px; position: relative; padding: 2rem;">
+            <button onclick="hideAttendanceKiosk()"
+                style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem;">&times;</button>
+            <h2 style="margin-bottom: 1.5rem; text-align: center;">Attendance Kiosk</h2>
+
+            <!-- Step 1: ID Input -->
+            <div id="id-input-step" style="text-align: center;">
+                <div style="margin-bottom: 1.5rem;">
+                    <i class="fas fa-id-card" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <p style="color: var(--text-secondary);">Enter your Student or Staff ID to begin</p>
+                </div>
+                <input type="text" id="student-id-input" placeholder="e.g., STU001 or STAFF001"
+                    style="width: 100%; padding: 1rem; border-radius: var(--radius-lg); background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1); color: white; font-size: 1.1rem; text-align: center; margin-bottom: 1rem;">
+                <button id="submit-id-btn" onclick="submitStudentId()" class="btn btn-primary btn-lg w-full">
+                    <i class="fas fa-arrow-right"></i> Continue
+                </button>
+            </div>
+
+            <!-- Step 2: Face Verification -->
+            <div id="verification-step" style="display: none;">
+                <!-- User Profile Display -->
+                <div class="glass-card" style="padding: 1rem; margin-bottom: 1.5rem; text-align: left;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <i class="fas fa-user-circle" style="font-size: 3rem; color: var(--primary);"></i>
+                        <div style="flex: 1;">
+                            <h3 id="user-name-display" style="margin: 0; font-size: 1.2rem;">Loading...</h3>
+                            <p id="user-email-display"
+                                style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                email@example.com</p>
+                            <p id="user-id-display"
+                                style="margin: 0.25rem 0 0 0; color: var(--text-secondary); font-size: 0.85rem;">ID:
+                                STU001</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Camera Feed -->
+                <div id="camera-container"
+                    style="position: relative; width: 100%; aspect-ratio: 4/3; background: #000; border-radius: 1rem; overflow: hidden; margin-bottom: 1rem;">
+                    <video id="kiosk-video" style="width: 100%; height: 100%; object-fit: cover;" autoplay
+                        playsinline></video>
+                    <canvas id="kiosk-canvas" style="display: none;"></canvas>
+                    <div id="scan-overlay"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 2px solid var(--primary); opacity: 0.3; pointer-events: none;">
+                    </div>
+                </div>
+
+                <button id="kiosk-capture-btn" onclick="captureAndVerify()" class="btn btn-primary btn-lg w-full">
+                    <i class="fas fa-camera"></i> Verify Face
+                </button>
+            </div>
+
+            <div id="kiosk-status" class="mt-3" style="min-height: 1.5rem; font-weight: 500; text-align: center;">Enter
+                your ID to begin</div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" style="position: fixed; top: 2rem; right: 2rem; z-index: 3000;"></div>
+
+    <script src="/js/attendance.js"></script>
+
+</body>
+
+</html>

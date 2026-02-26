@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - AI Smart Attendance</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <nav
+        style="background: var(--glass-bg); backdrop-filter: blur(10px); padding: 1rem 2rem; border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100;">
+        <div class="container flex justify-between items-center" style="max-width: 1200px; padding: 0;">
+            <a href="/"
+                style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                <i class="fas fa-fingerprint" style="font-size: 1.5rem; color: var(--primary);"></i>
+                <h3 style="margin: 0;">Attendo.AI</h3>
+            </a>
+            <div class="flex items-center gap-3">
+                <span id="user-name" style="color: var(--text-primary); font-weight: 500;"></span>
+
+                <a href="/announcements.html"
+                    style="color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; margin-right: 1rem;"
+                    onmouseover="this.style.color='var(--primary)'"
+                    onmouseout="this.style.color='var(--text-secondary)'">
+                    <i class="fas fa-bullhorn"></i> Announcements
+                </a>
+
+                <a href="/student/profile.html"
+                    style="color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s;"
+                    onmouseover="this.style.color='var(--primary)'"
+                    onmouseout="this.style.color='var(--text-secondary)'">
+                    <i class="fas fa-user-circle"></i> Profile
+                </a>
+
+                <button onclick="logout()" class="btn btn-secondary"
+                    style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--glass-border);">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 2rem 0;">
+        <div class="fade-in-up">
+            <h1>Student Dashboard</h1>
+            <p style="color: var(--text-secondary);">Welcome back! Here's your attendance overview.</p>
+        </div>
+
+        <div class="grid grid-3 mt-4">
+            <div class="glass-card fade-in">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p style="color: var(--text-muted); margin: 0;">Today's Status</p>
+                        <h2 id="today-status" style="margin: 0.5rem 0;">Loading...</h2>
+                    </div>
+                    <i class="fas fa-calendar-check" style="font-size: 2.5rem; color: var(--success);"></i>
+                </div>
+            </div>
+
+            <div class="glass-card fade-in">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p style="color: var(--text-muted); margin: 0;">Attendance %</p>
+                        <h2 id="attendance-percentage" style="margin: 0.5rem 0;">0%</h2>
+                    </div>
+                    <i class="fas fa-chart-pie" style="font-size: 2.5rem; color: var(--primary);"></i>
+                </div>
+            </div>
+
+            <!-- AI Assistant Card (Replaced Quick Action) -->
+            <div class="glass-card fade-in"
+                onclick="if(event.target.tagName !== 'INPUT' && event.target.tagName !== 'BUTTON' && !event.target.closest('button')) ChatbotWidget.toggleChat()"
+                style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%); border: 1px solid var(--primary); cursor: pointer; transition: transform 0.3s ease;">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 style="margin: 0; color: var(--primary);"><i class="fas fa-robot"></i> Smart AI Assistant</h4>
+                    <span class="badge" style="background: var(--primary); font-size: 0.7rem;">LIVE</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Ask me anything about
+                    your attendance or subjects!</p>
+                <div class="flex gap-2">
+                    <input type="text" id="dashboard-ai-input" placeholder="Type your doubt..."
+                        style="flex: 1; padding: 0.5rem 1rem; border-radius: var(--radius-full); background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; font-size: 0.9rem;"
+                        onkeypress="if(event.key === 'Enter') { ChatbotWidget.openWithText(this.value); this.value = ''; }">
+                    <button
+                        onclick="const input = document.getElementById('dashboard-ai-input'); ChatbotWidget.openWithText(input.value); input.value = '';"
+                        class="btn btn-primary"
+                        style="padding: 0.5rem 1rem; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card mt-4 fade-in-up">
+            <h3><i class="fas fa-history"></i> Recent Attendance</h3>
+            <div id="attendance-list">
+                <p style="text-align: center; color: var(--text-muted);">Loading...</p>
+            </div>
+        </div>
+
+        <div class="glass-card mt-4 fade-in-up">
+            <h3><i class="fas fa-file-pdf"></i> Course Documents</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">Download PDFs, assignments,
+                and study materials shared by staff.</p>
+            <div id="documents-list">
+                <p style="text-align: center; color: var(--text-muted);">Loading documents...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
+        document.getElementById('user-name').textContent = user.name || 'Student';
+
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_URL}/student/dashboard`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    // Update today's status
+                    const status = data.today_status.status;
+                    const statusElement = document.getElementById('today-status');
+                    statusElement.textContent = status.toUpperCase();
+                    statusElement.style.color = status === 'present' ? 'var(--success)' :
+                        status === 'late' ? 'var(--warning)' : 'var(--danger)';
+
+                    // Update percentage
+                    document.getElementById('attendance-percentage').textContent =
+                        data.attendance_percentage + '%';
+
+                    // Update recent attendance
+                    const attendanceList = document.getElementById('attendance-list');
+                    if (data.recent_attendance.length > 0) {
+                        attendanceList.innerHTML = data.recent_attendance.map(record => `
+                            <div style="padding: 1rem; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between;">
+                                <div>
+                                    <strong>${new Date(record.date).toLocaleDateString()}</strong>
+                                    <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">
+                                        ${new Date(record.time_in).toLocaleTimeString()}
+                                    </p>
+                                </div>
+                                <span style="color: ${record.status === 'present' ? 'var(--success)' :
+                                record.status === 'late' ? 'var(--warning)' : 'var(--danger)'};">
+                                    ${record.status.toUpperCase()}
+                                </span>
+                            </div>
+                        `).join('');
+                    } else {
+                        attendanceList.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No attendance records yet</p>';
+                    }
+                } else {
+                    console.error('Failed to load dashboard');
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        async function loadDocuments() {
+            try {
+                const response = await fetch(`${API_URL}/documents`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const list = document.getElementById('documents-list');
+                    if (data.documents.length > 0) {
+                        list.innerHTML = data.documents.map(doc => `
+                            <div style="padding: 1rem; border: 1px solid var(--glass-border); border-radius: var(--radius-md); margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); transition: all 0.3s;" class="hover-lift">
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);">${doc.title}</h4>
+                                    <p style="margin: 0.25rem 0; color: var(--text-muted); font-size: 0.85rem;">
+                                        Subject: ${doc.subject || 'General'} • By: ${doc.uploader_name}
+                                    </p>
+                                    ${doc.description ? `<p style="margin: 0.5rem 0 0; font-size: 0.9rem;">${doc.description}</p>` : ''}
+                                </div>
+                                <a href="${API_URL}/documents/download/${doc.document_id}" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.9rem;">
+                                    <i class="fas fa-download"></i> Download
+                                </a>
+                            </div>
+                        `).join('');
+                    } else {
+                        list.innerHTML = '<p style="text-align: center; color: var(--text-muted);">No documents shared yet</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading documents:', error);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
+
+        loadDashboard();
+        loadDocuments();
+    </script>
+    <script src="/js/chatbot.js?v=restore_half_screen"></script>
+</body>
+
+</html>

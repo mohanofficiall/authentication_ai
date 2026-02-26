@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile - AI Smart Attendance</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <nav
+        style="background: var(--glass-bg); backdrop-filter: blur(10px); padding: 1rem 2rem; border-bottom: 1px solid var(--glass-border); position: sticky; top: 0; z-index: 100;">
+        <div class="container flex justify-between items-center" style="max-width: 1200px; padding: 0;">
+            <a href="/"
+                style="text-decoration: none; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                <i class="fas fa-fingerprint" style="font-size: 1.5rem; color: var(--primary);"></i>
+                <h3 style="margin: 0;">Attendo.AI</h3>
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="/student/dashboard.html"
+                    style="color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s;"
+                    onmouseover="this.style.color='var(--primary)'"
+                    onmouseout="this.style.color='var(--text-secondary)'">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </a>
+
+                <span id="user-name-nav"
+                    style="color: var(--text-primary); font-weight: 500; margin-left: 0.5rem;"></span>
+
+                <button onclick="logout()" class="btn btn-secondary"
+                    style="background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--glass-border); margin-left: 0.5rem;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 2rem 0; max-width: 800px;">
+        <div class="fade-in-up">
+            <h1>My Profile</h1>
+            <p style="color: var(--text-secondary);">Manage your account and face data</p>
+        </div>
+
+        <div class="grid grid-2 mt-4" style="gap: 2rem;">
+            <!-- Profile Details -->
+            <div class="glass-card fade-in">
+                <h3><i class="fas fa-user-edit"></i> Personal Details</h3>
+                <form id="profile-form" style="margin-top: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" id="name" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="email" class="form-input" disabled style="opacity: 0.7;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">New Password (optional)</label>
+                        <input type="password" id="password" class="form-input"
+                            placeholder="Leave blank to keep current">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Save Changes</button>
+                </form>
+            </div>
+
+            <!-- Face Data Update -->
+            <div class="glass-card fade-in">
+                <h3><i class="fas fa-camera"></i> Update Face Data</h3>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                    Re-register your face if you encounter recognition issues.
+                </p>
+
+                <div
+                    style="position: relative; width: 100%; height: 240px; background: #000; border-radius: var(--radius-md); overflow: hidden; margin-bottom: 1rem;">
+                    <video id="video" autoplay playsinline
+                        style="width: 100%; height: 100%; object-fit: cover;"></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="button" id="start-camera" class="btn btn-secondary flex-1">
+                        <i class="fas fa-video"></i> Start Camera
+                    </button>
+                    <button type="button" id="capture-btn" class="btn btn-primary flex-1" disabled>
+                        <i class="fas fa-camera"></i> Capture
+                    </button>
+                </div>
+
+                <div id="photo-preview" class="hidden mt-3 text-center">
+                    <img id="preview-img" src="" alt="Preview"
+                        style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid var(--primary); margin: 0 auto;">
+                    <div class="flex gap-2 justify-center mt-2">
+                        <button type="button" id="save-photo" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Photo
+                        </button>
+                        <button type="button" id="retake-photo" class="btn btn-outline">
+                            Retake
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const token = localStorage.getItem('token');
+
+        if (!token) window.location.href = '/login.html';
+
+        // Load Profile
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API_URL}/student/profile`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('name').value = data.user.name;
+                    document.getElementById('email').value = data.user.email;
+                    document.getElementById('user-name-nav').textContent = data.user.name;
+
+                    // Update user in local storage
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                }
+            } catch (err) {
+                console.error('Error loading profile:', err);
+            }
+        }
+
+        // Update Profile
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/student/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, password })
+                });
+
+                if (response.ok) {
+                    alert('Profile updated successfully!');
+                    loadProfile();
+                } else {
+                    alert('Failed to update profile');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error updating profile');
+            }
+        });
+
+        // Camera Logic
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const startBtn = document.getElementById('start-camera');
+        const captureBtn = document.getElementById('capture-btn');
+        let stream = null;
+
+        startBtn.addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                captureBtn.disabled = false;
+                startBtn.classList.add('hidden');
+            } catch (err) {
+                alert('Camera access denied');
+            }
+        });
+
+        captureBtn.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            const imageData = canvas.toDataURL('image/jpeg');
+            document.getElementById('preview-img').src = imageData;
+            document.getElementById('photo-preview').classList.remove('hidden');
+
+            // Stop stream
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+        });
+
+        document.getElementById('retake-photo').addEventListener('click', () => {
+            document.getElementById('photo-preview').classList.add('hidden');
+            startBtn.classList.remove('hidden');
+            startBtn.click();
+        });
+
+        document.getElementById('save-photo').addEventListener('click', async () => {
+            const imageData = document.getElementById('preview-img').src;
+            try {
+                const response = await fetch(`${API_URL}/student/profile/photo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ face_image: imageData })
+                });
+
+                if (response.ok) {
+                    alert('Face data updated successfully! You can now mark attendance.');
+                    window.location.reload();
+                } else {
+                    const err = await response.json();
+                    alert(err.error || 'Failed to update photo');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error updating photo');
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/login.html';
+        }
+
+        loadProfile();
+    </script>
+</body>
+
+</html>

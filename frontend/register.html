@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - AI Smart Attendance</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <div class="container" style="min-height: 100vh; padding: 2rem 0;">
+        <div class="glass-card fade-in-up" style="max-width: 600px; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-user-plus" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                <h2>Create Account</h2>
+                <p style="color: var(--text-secondary);">Register for AI Smart Attendance System</p>
+            </div>
+
+            <div id="alert-container"></div>
+
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="name" class="form-input" placeholder="John Doe" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" class="form-input" placeholder="your.email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" class="form-input"
+                        placeholder="Min 8 chars, uppercase, number, special char" required>
+                    <small style="color: var(--text-muted); font-size: 0.85rem;">
+                        Must contain: uppercase, lowercase, number, special character
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-user-tag"></i> Role</label>
+                    <select id="role" class="form-select" required>
+                        <option value="">Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="student-id-group" style="display: none;">
+                    <label class="form-label"><i class="fas fa-id-card"></i> Student ID</label>
+                    <input type="text" id="student_id" class="form-input" placeholder="STU001">
+                </div>
+
+                <div class="form-group" id="staff-id-group" style="display: none;">
+                    <label class="form-label"><i class="fas fa-id-badge"></i> Staff ID</label>
+                    <input type="text" id="staff_id" class="form-input" placeholder="STAFF001">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-camera"></i> Face Image</label>
+                    <div style="text-align: center;">
+                        <video id="video" width="100%" height="300" autoplay
+                            style="border-radius: var(--radius-md); background: var(--bg-secondary); display: none;"></video>
+                        <canvas id="canvas" style="display: none;"></canvas>
+                        <img id="preview" style="max-width: 100%; border-radius: var(--radius-md); display: none;">
+
+                        <div
+                            style="margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                            <button type="button" id="start-camera-btn" class="btn btn-secondary">
+                                <i class="fas fa-camera"></i> Start Camera
+                            </button>
+                            <button type="button" id="capture-btn" class="btn btn-primary" style="display: none;">
+                                <i class="fas fa-camera-retro"></i> Capture Face
+                            </button>
+                            <button type="button" id="retake-btn" class="btn btn-secondary" style="display: none;">
+                                <i class="fas fa-redo"></i> Retake
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="face_image">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full" id="register-btn">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+            </form>
+
+            <div
+                style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--glass-border);">
+                <p style="color: var(--text-secondary);">
+                    Already have an account?
+                    <a href="/login.html" style="color: var(--primary); font-weight: 600;">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let stream = null;
+
+        // Show/hide ID fields based on role
+        document.getElementById('role').addEventListener('change', (e) => {
+            const role = e.target.value;
+            document.getElementById('student-id-group').style.display = role === 'student' ? 'block' : 'none';
+            document.getElementById('staff-id-group').style.display = role === 'staff' ? 'block' : 'none';
+        });
+
+        // Camera controls
+        document.getElementById('start-camera-btn').addEventListener('click', async () => {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('video');
+                video.srcObject = stream;
+                video.style.display = 'block';
+                document.getElementById('start-camera-btn').style.display = 'none';
+                document.getElementById('capture-btn').style.display = 'inline-flex';
+            } catch (error) {
+                alert('Error accessing camera: ' + error.message);
+            }
+        });
+
+        document.getElementById('capture-btn').addEventListener('click', () => {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const preview = document.getElementById('preview');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+
+            const imageData = canvas.toDataURL('image/jpeg');
+            document.getElementById('face_image').value = imageData;
+
+            preview.src = imageData;
+            preview.style.display = 'block';
+            video.style.display = 'none';
+
+            document.getElementById('capture-btn').style.display = 'none';
+            document.getElementById('retake-btn').style.display = 'inline-flex';
+
+            // Stop camera
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+
+        document.getElementById('retake-btn').addEventListener('click', () => {
+            document.getElementById('preview').style.display = 'none';
+            document.getElementById('face_image').value = '';
+            document.getElementById('retake-btn').style.display = 'none';
+            document.getElementById('start-camera-btn').style.display = 'inline-flex';
+        });
+
+        // Form submission
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const student_id = document.getElementById('student_id').value;
+            const staff_id = document.getElementById('staff_id').value;
+            const face_image = document.getElementById('face_image').value;
+
+            if (!face_image) {
+                showAlert('error', 'Please capture your face image');
+                return;
+            }
+
+            const registerBtn = document.getElementById('register-btn');
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        role,
+                        student_id: role === 'student' ? student_id : null,
+                        staff_id: role === 'staff' ? staff_id : null,
+                        face_image
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('success', 'OTP sent to your email! Redirecting to verification...');
+                    setTimeout(() => {
+                        window.location.href = `/verify-otp.html?email=${encodeURIComponent(email)}`;
+                    }, 1500);
+                } else {
+                    showAlert('error', data.error);
+                    registerBtn.disabled = false;
+                    registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
+                }
+            } catch (error) {
+                showAlert('error', 'Network error. Please check if the server is running.');
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
+            }
+        });
+
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+
+            alertContainer.innerHTML = `
+                <div class="alert ${alertClass} fade-in">
+                    <i class="fas fa-${icon}"></i> ${message}
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>
