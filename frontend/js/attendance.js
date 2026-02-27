@@ -3,7 +3,8 @@
  * Two-step verification: Enter ID → Verify Face
  */
 
-const API_URL = '/api/public';
+const API_BASE = window.location.origin.includes('http') ? window.location.origin : 'http://localhost:5000';
+const API_URL = API_BASE + '/api/public';
 let kioskStream = null;
 let currentUser = null;
 

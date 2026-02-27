@@ -1,6 +1,8 @@
 # AI Smart Attendance System
 
-Enterprise-Grade Face Recognition & Biometric Attendance System with NLP Chatbot
+In many colleges and companies, proxy attendance is a major issue. Students mark attendance for others using fake methods like photos, screenshots, or remote logins.
+
+To solve this, we built an AI-Powered Smart Attendance System that uses Face Recognition, Liveness Detection, and Geo-Fencing to prevent fraud.
 
 ## 🚀 Features
 

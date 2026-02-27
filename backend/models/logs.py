@@ -27,7 +27,7 @@ class FraudAlert(db.Model):
         return {
             'alert_id': self.alert_id,
             'user_id': self.user_id,
-            'user_name': self.user.name if self.user else None,
+            'user_name': self.target_user.name if hasattr(self, 'target_user') and self.target_user else None,
             'alert_type': self.alert_type,
             'description': self.description,
             'severity': self.severity,
@@ -60,7 +60,7 @@ class SystemLog(db.Model):
         return {
             'log_id': self.log_id,
             'user_id': self.user_id,
-            'user_name': self.user.name if self.user else None,
+            'user_name': self.log_user.name if hasattr(self, 'log_user') and self.log_user else None,
             'action': self.action,
             'ip_address': self.ip_address,
             'status': self.status,

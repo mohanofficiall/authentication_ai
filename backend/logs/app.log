@@ -1382,3 +1382,212 @@ FROM announcements ORDER BY announcements.created_at DESC]
 [2025-12-29 23:16:06,654] INFO in app: [OK] AI Smart Attendance System initialized
 [2025-12-29 23:16:06,654] INFO in app: [OK] AI Smart Attendance System initialized
 [2025-12-29 23:16:06,654] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 17:10:52,970] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 17:10:56,053] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 17:15:26,626] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:15:56,640] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:16:26,621] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:16:56,620] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:17:26,640] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:17:56,645] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:18:26,643] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:18:56,643] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:19:35,657] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:20:35,665] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:21:35,654] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:22:35,658] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:23:35,645] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:24:35,664] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:25:35,667] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:25:56,620] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:26:26,644] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:26:56,637] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:27:35,650] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:28:35,664] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:28:56,637] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:29:26,635] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:30:34,021] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 17:30:34,449] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:31:28,652] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:32:29,673] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:33:30,667] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:34:31,669] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:35:32,648] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:36:21,410] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:36:26,301] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:36:56,633] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:37:26,634] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:38:27,655] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:39:28,661] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 17:40:29,653] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:11:50,940] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:12:35,663] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:13:35,648] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:14:35,654] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:15:35,672] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:16:35,644] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:18:53,727] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:22:15,485] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:22:35,635] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:23:35,653] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:24:35,659] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:25:35,658] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:26:35,649] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:27:35,653] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:27:56,631] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:28:26,623] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:28:56,633] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:29:26,615] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:29:56,640] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:30:26,637] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:31:12,982] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:31:26,633] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:31:56,641] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:32:35,654] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:33:35,657] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:34:35,654] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:35:35,657] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:35:56,631] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:36:26,623] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:36:56,626] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:37:26,616] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:37:56,642] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:38:26,653] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 18:39:27,653] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:09:06,931] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 19:09:20,099] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 19:09:35,664] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:10:35,641] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:11:35,645] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:12:35,643] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:13:35,650] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:14:35,653] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:15:35,669] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:16:35,657] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:17:35,660] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:18:35,657] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:19:35,654] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:20:35,652] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:21:35,652] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:21:56,640] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:22:26,651] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:22:56,652] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:23:26,625] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:23:56,634] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:24:26,624] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:24:56,639] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:25:26,635] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:25:56,619] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:26:26,655] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:26:56,641] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:27:26,635] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:28:27,640] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:29:28,645] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:30:29,656] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:31:30,659] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:32:31,662] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:33:32,654] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:34:33,649] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:35:12,177] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:35:26,644] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:35:56,644] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:36:35,661] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:37:35,674] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:38:35,652] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:39:35,653] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:40:35,656] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 19:41:35,642] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 21:55:23,944] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 22:21:02,230] INFO in email_service: OTP email sent successfully to mohanroyal753@gmail.com
+[2026-02-27 22:29:45,912] INFO in email_service: OTP email sent successfully to mohanroyal753@gmail.com
+[2026-02-27 22:31:37,692] ERROR in chatbot: OpenRouter Error: {"error":{"message":"User not found.","code":401}}
+[2026-02-27 22:46:17,111] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:46:48,029] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:47:18,023] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:47:48,020] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:48:18,022] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:48:31,857] INFO in email_service: OTP email sent successfully to tejeshreddy1305@gmail.com
+[2026-02-27 22:48:48,031] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:49:18,033] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:49:48,026] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:49:48,529] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:49:59,019] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:50:08,520] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:50:19,018] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:50:29,017] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:50:35,027] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:50:39,017] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:50:49,022] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:50:59,024] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:51:09,021] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:51:19,024] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:51:35,038] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:51:35,042] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:52:35,026] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:52:35,034] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:53:35,041] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:53:35,046] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:54:35,041] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:54:35,045] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:55:35,041] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:55:35,049] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:56:35,037] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:56:35,045] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:57:35,031] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:57:35,037] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:58:35,038] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 22:58:35,042] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:59:35,031] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 22:59:35,038] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 23:00:35,041] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 23:00:35,047] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 23:01:35,028] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 23:01:35,044] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 23:02:35,035] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 23:02:35,040] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 23:03:35,047] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 23:03:35,052] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 23:04:35,035] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 23:04:35,054] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 23:05:35,026] ERROR in staff: Staff dashboard error: Function.__init__() got an unexpected keyword argument 'else_'
+[2026-02-27 23:05:35,031] ERROR in admin: Fraud alerts error: 'FraudAlert' object has no attribute 'user'
+[2026-02-27 23:05:54,815] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:05:58,007] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:06:30,608] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:19:45,271] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:21:00,363] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:44:23,868] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:45:01,436] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:45:29,984] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:45:44,845] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:45:58,396] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:46:06,204] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:46:11,881] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:46:50,551] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:46:55,628] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:47:09,862] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:47:15,172] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:47:39,513] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:47:47,214] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:47:53,578] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:48:47,737] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:48:58,035] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:49:04,397] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:49:42,907] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:51:15,407] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:51:21,415] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-27 23:51:25,311] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:00:21,929] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:00:24,879] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:11:30,730] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:11:33,722] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:17:20,063] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:17:20,186] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:17:20,506] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:17:29,081] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:17:29,182] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:17:29,537] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:21:48,703] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:22:55,965] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:22:58,830] INFO in app: [OK] AI Smart Attendance System initialized
+[2026-02-28 00:23:49,001] INFO in app: [OK] AI Smart Attendance System initialized

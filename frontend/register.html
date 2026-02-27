@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - AI Smart Attendance</title>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -100,7 +100,8 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:5000/api';
+        const API_BASE = window.location.origin.includes('http') ? window.location.origin : 'http://localhost:5000';
+        const API_URL = API_BASE + '/api';
         let stream = null;
 
         // Show/hide ID fields based on role
@@ -113,6 +114,15 @@
         // Camera controls
         document.getElementById('start-camera-btn').addEventListener('click', async () => {
             try {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    const isInsecure = window.location.protocol === 'http:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+                    if (isInsecure) {
+                        alert('Camera access requires a secure connection.\n\nPlease access this page using one of these URLs instead:\n• http://localhost:5000/register.html\n• http://127.0.0.1:5000/register.html');
+                    } else {
+                        alert('Camera not available. Please ensure your browser has camera permissions enabled.');
+                    }
+                    return;
+                }
                 stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 const video = document.getElementById('video');
                 video.srcObject = stream;

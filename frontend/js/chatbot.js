@@ -258,7 +258,11 @@ const ChatbotWidget = {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('/api/chatbot/message', {
+            // Determine API URL (default to localhost:5000 if running from file system)
+            const baseUrl = window.location.origin.includes('http') ? window.location.origin : 'http://localhost:5000';
+            const apiUrl = `${baseUrl}/api/chatbot/message`;
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
